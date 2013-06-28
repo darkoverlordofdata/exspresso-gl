@@ -16,7 +16,11 @@
 #
 
 module.exports = class General
-  error_messages: {}
+
+  error_messages: null
+
+  constructor: (@controller, $config = {}) ->
+    @error_messages = {}
   
 
   #  Check format of config/accounts ini files 

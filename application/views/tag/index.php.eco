@@ -1,0 +1,22 @@
+<% @db.from('tags').order_by('title', 'asc')
+$tags_q = @db.get()
+echo "<table border=0 cellpadding=5 class=\"simple-table tag-table\">"
+echo "<thead><tr><th>Title</th><th>Color</th><th></th></tr></thead>"
+echo "<tbody>"
+$odd_even = "odd"
+for $row in $tags_q.result()
+  echo "<tr class=\"tr-" + $odd_even + "\">"
+  echo "<td>" + $row.title + "</td>"
+  echo "<td>" + @Tag_model.show_entry_tag($row.id) + "</td>"
+  
+  echo "<td>" + anchor('tag/edit/' + $row.id, "Edit", 'title':'Edit Tag', 'class':'red-link')
+  echo " &nbsp;"
+  echo anchor('tag/delete/' + $row.id, img('src':asset_url( + "images/icons/delete.png", 'border':'0', 'alt':'Delete Tag', 'class':"confirmClick", 'title':"Delete Tag")), 'title':'Delete  Tag') + "</td>"
+  echo "</tr>"
+  $odd_even = if ($odd_even is "odd") then "even" else "odd"
+  
+echo "</tbody>"
+echo "</table>"
+echo "<br />"
+echo anchor('setting', 'Back', 'title':'Back to Settings')
+

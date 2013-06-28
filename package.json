@@ -1,0 +1,38 @@
+{
+  "name": "ExspressoGL",
+  "version": "0.0.1",
+  "description": "Port of Webzash",
+  "keywords": [
+    "framework",
+    "web",
+    "coffee-script",
+    "mvc",
+    "desktop"
+  ],
+  "author": "bruce davidson <darkoverlordofdata@gmail.com>",
+  "contributors": [
+    {
+      "name": "bruce davidson",
+      "email": "darkoverlordofdata@gmail.com"
+    }
+  ],
+  "dependencies": {
+    "coffee-script": "~1.6.3",
+    "bcrypt": "~0.7.6",
+    "redis": "~0.8.3",
+    "memjs": "~0.6.0",
+    "mysql": "~2.0.0-alpha8",
+    "exspresso": "~0.10.15"
+  },
+  "scripts": {
+    "start": "node index.js --install",
+    "test": "cake test"
+  },
+  "repository": "git://github.com/darkoverlordofdata/exspresso",
+  "main": "index",
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.2.x"
+  },
+  "license": "MIT"
+}

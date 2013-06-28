@@ -1,0 +1,77 @@
+<div id="dashboard-summary">
+	<div id="dashboard-welcome-back" class="dashboard-item">
+		<div class="dashboard-title">Account Details</div>
+		<div class="dashboard-content">
+			<table class="dashboard-summary-table">
+				<tbody>
+					<tr>
+						<td><div>Welcome back, <strong><%- @config.item('account_name') %> !</strong></div></td>
+					</tr>
+					<tr>
+						<td><div>Account for Financial Year <strong><%- date_mysql_to_php_display(@config.item('account_fy_start')) + " - " + date_mysql_to_php_display(@config.item('account_fy_end')) %></strong></div></td>
+					</tr>
+					<% if @config.item('account_locked') is 1 then   %>						<tr>
+							<td><div>Account is currently <strong>locked</strong> to prevent any further modifications.</div></td>
+						</tr>
+					<%  %>				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="clear"></div>
+	<div id="dashboard-cash-bank" class="dashboard-item">
+		<div class="dashboard-title">Bank and Cash accounts</div>
+		<div class="dashboard-content">
+			<% if $bank_cash_account then 
+  echo "<table class=\"dashboard-cashbank-table\">"
+  echo "<tbody>"
+  for $id, $row of $bank_cash_account
+    echo "<tr>"
+    echo "<td>" + anchor('report/ledgerst/' + $row['id'], $row['name'], 'title':$row['name'] + ' Statement') + "</td>"
+    echo "<td>" + convert_amount_dc($row['balance']) + "</td>"
+    echo "</tr>"
+    
+  echo "</tbody>"
+  echo "</table>"
+  else 
+  echo "You have not created any bank or cash account"
+  
+ %>		</div>
+	</div>
+	<div id="dashboard-summary" class="dashboard-item">
+		<div class="dashboard-title">Account Summary</div>
+		<div class="dashboard-content">
+			<% echo "<table class=\"dashboard-summary-table\">"
+echo "<tbody>"
+echo "<tr><td>Assets Total</td><td>" + convert_amount_dc($asset_total) + "</td></tr>"
+echo "<tr><td>Liabilities Total</td><td>" + convert_amount_dc($liability_total) + "</td></tr>"
+echo "<tr><td>Incomes Total</td><td>" + convert_amount_dc($income_total) + "</td></tr>"
+echo "<tr><td>Expenses Total</td><td>" + convert_amount_dc($expense_total) + "</td></tr>"
+echo "</tbody>"
+echo "</table>"
+ %>		</div>
+	</div>
+</div>
+<% if check_access('view log') then   %>	<div id="dashboard-log">
+		<div id="dashboard-recent-log" class="dashboard-log-item">
+			<div class="dashboard-log-title">Recent Activity</div>
+			<div class="dashboard-log-content">
+				<% if $logs then 
+    echo "<ul id=\"recent-activity-list\">"
+    for $row in $logs.result()
+      echo "<li>" + $row.message_title + "</li>"
+      
+    echo "</ul>"
+    else 
+    echo "No Recent Activity"
+    
+   %>			</div>
+			<% if $logs then 
+    echo "<div class=\"dashboard-log-footer\">"
+    echo "<span>"
+    echo anchor("log", "more...", 'class':'anchor-link-a')
+    echo "</span>"
+    
+   %>			</div>
+		</div>
+	</div>
+<%  %><div class="clear"></div>

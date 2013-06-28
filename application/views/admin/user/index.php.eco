@@ -1,0 +1,68 @@
+<% echo "<p>"
+echo "<b>You are logged in as : </b>"
+echo @session.userdata('user_name')
+echo "</p>"
+
+echo "<table border=0 cellpadding=5 class=\"simple-table manage-account-table\">"
+echo "<thead><tr><th>Username</th><th>Email</th><th>Role</th><th>Status</th><th></th></tr></thead>"
+echo "<tbody>"
+$odd_even = "odd"
+for $row in $users
+  $ini_file = @config.item('config_path') + "users/" + $row + ".ini"
+  
+  #  Check if database ini file exists 
+  if get_file_info($ini_file) then 
+    #  Parsing database ini file 
+    $active_users = parse_ini_file($ini_file)
+    if $active_users then 
+      $username = if $active_users['username']?  then $active_users['username'] else "-"
+      $email = if $active_users['email']?  then $active_users['email'] else "-"
+      $role = if $active_users['role']?  then $active_users['role'] else "-"
+      $status = if $active_users['status']?  then $active_users['status'] else "-"
+      
+    
+  
+  echo "<tr class=\"tr-" + $odd_even
+  if @session.userdata('user_name') is $row then echo " tr-active"
+  echo "\">"
+  echo "<td>" + $username + "</td>"
+  echo "<td>" + $email + "</td>"
+  
+  echo "<td>"
+  switch $role
+    when "administrator"echo "administrator"
+    when "manager"echo "manager"
+    when "accountant"echo "accountant"
+    when "dataentry"echo "dataentry"
+    when "guest"echo "guest"
+    elseecho "(unknown)"
+      
+  echo "</td>"
+  
+  echo "<td>"
+  switch $status
+    when 0echo "Disabled"
+    when 1echo "Active"
+    elseecho "(unknown)"
+      
+  echo "</td>"
+  
+  if @session.userdata('user_name') is $row then 
+    echo "<td>"
+    echo anchor("admin/user/edit/" + $row, "Edit", 'title':'Edit User', 'class':'red-link')
+    echo "</td>"
+    else 
+    echo "<td>"
+    echo anchor("admin/user/edit/" + $row, "Edit", 'title':'Edit User', 'class':'red-link')
+    echo " &nbsp;" + anchor('admin/user/delete/' + $row, img('src':asset_url( + "images/icons/delete.png", 'border':'0', 'alt':'Delete User', 'class':"confirmClick", 'title':"Delete User")), 'title':'Delete User') + " "
+    echo "</td>"
+    
+  
+  echo "</tr>"
+  $odd_even = if ($odd_even is "odd") then "even" else "odd"
+  
+echo "</tbody>"
+echo "</table>"
+echo "<br />"
+echo anchor('admin', 'Back', 'title':'Back to admin')
+

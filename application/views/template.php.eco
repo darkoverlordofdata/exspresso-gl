@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<title>Webzash<% if $page_title?  then echo ' | ' + $page_title %></title>
+
+<%- link_tag(asset_url() + 'images/favicon.ico', 'shortcut icon', 'image/ico') %>
+<link type="text/css" rel="stylesheet" href="<%- asset_url() %>css/style.css">
+<link type="text/css" rel="stylesheet" href="<%- asset_url() %>css/tables.css">
+<link type="text/css" rel="stylesheet" href="<%- asset_url() %>css/custom.css">
+<link type="text/css" rel="stylesheet" href="<%- asset_url() %>css/menu.css">
+<link type="text/css" rel="stylesheet" href="<%- asset_url() %>css/jquery.datepick.css">
+<link type="text/css" rel="stylesheet" href="<%- asset_url() %>css/thickbox.css">
+
+<% #  Dynamically adding css files from controllers 
+if $add_css?  then 
+  for $id, $row of $add_css
+    echo "<link type=\"text/css\" rel=\"stylesheet\" href=\"" + asset_url() + $row + "\">"
+    
+  
+ %>
+<script type="text/javascript">
+	var jsSiteUrl = '<%- base_url() %>';
+</script>
+
+<script type="text/javascript" src="<%- asset_url() %>js/jquery.min.js"></script>
+<script type="text/javascript" src="<%- asset_url() %>js/jquery.datepick.js"></script>
+<script type="text/javascript" src="<%- asset_url() %>js/custom.js"></script>
+<script type="text/javascript" src="<%- asset_url() %>js/hoverIntent.js"></script>
+<script type="text/javascript" src="<%- asset_url() %>js/superfish.js"></script>
+<script type="text/javascript" src="<%- asset_url() %>js/supersubs.js"></script>
+<script type="text/javascript" src="<%- asset_url() %>js/thickbox-compressed.js"></script>
+<script type="text/javascript" src="<%- asset_url() %>js/ezpz_tooltip.min.js"></script>
+<script type="text/javascript" src="<%- asset_url() %>js/shortcutslibrary.js"></script>
+<script type="text/javascript" src="<%- asset_url() %>js/shortcuts.js"></script>
+
+<% #  Dynamically adding javascript files from controllers 
+if $add_javascript?  then 
+  for $id, $row of $add_javascript
+    echo "<script type=\"text/javascript\" src=\"" + asset_url() + $row + "\"></script>"
+    
+  
+ %>
+<script type="text/javascript">
+/* Loading JQuery Superfish menu */
+$(document).ready(function() {
+	$("ul.sf-menu").supersubs({ 
+		minWidth:12,
+		maxWidth:27,
+		extraWidth: 1
+	}).superfish(); // call supersubs first, then superfish, so that subs are 
+	$('.datepicker').datepick({
+		dateFormat: '<%- @config.item('account_date_format') %>',
+	});
+	$('.datepicker-restrict').datepick({
+		dateFormat: '<%- @config.item('account_date_format') %>',
+		minDate: '<%- date_mysql_to_php(@config.item('account_fy_start')) %>',
+		maxDate: '<%- date_mysql_to_php(@config.item('account_fy_end')) %>',
+	});
+});
+</script>
+
+</head>
+<body>
+<div id="container">
+	<div id="header">
+		<div id="logo">
+			<%- anchor('', 'Webzash', 'class':'anchor-link-b') %>		</div>
+		<% if @session.userdata('user_name') then 
+  echo "<div id=\"admin\">"
+  echo anchor('', 'Accounts', 'title':"Accounts", 'class':'anchor-link-b')
+  echo " | "
+  #  Check if allowed administer rights 
+  if check_access('administer') then 
+    echo anchor('admin', 'Administer', 'title':"Administer", 'class':'anchor-link-b')
+    echo " | "
+    
+  echo anchor('user/profile', 'Profile', 'title':"Profile", 'class':'anchor-link-b')
+  echo " | "
+  echo anchor('user/logout', 'Logout', 'title':"Logout", 'class':'anchor-link-b')
+  echo "</div>"
+  
+ %>		<div id="info">
+			<% echo @config.item('account_name')
+echo " ("
+echo anchor('user/account', 'change', 'title':'Change active account', 'class':'anchor-link-a')
+echo ")<br />"
+echo "FY : "
+echo date_mysql_to_php_display(@config.item('account_fy_start'))
+echo " - "
+echo date_mysql_to_php_display(@config.item('account_fy_end'))
+ %>		</div>
+	</div>
+	<div id="menu">
+		<ul class="sf-menu">
+			<li class="current">
+				<a href="<% printbase_url() %>" title="Dashboard">Dashboard</a>
+			</li>
+			<li>
+				<%- anchor('account', 'Accounts', 'title':'Chart of accounts') %>			</li>
+			<li>
+				<% #  Showing Entry Type sub-menu 
+$entry_type_all = @config.item('account_entry_types')
+$entry_type_count = count($entry_type_all)
+if $entry_type_count < 1 then 
+  echo ""
+  else if $entry_type_count is 1 then 
+  for $id, $row of $entry_type_all
+    echo anchor('entry/show/' + $row['label'], $row['name'], 'title':$row['name'] + ' Entries')
+    
+  else 
+  echo anchor('entry', 'Entries', 'title':'Entries')
+  echo "<ul>"
+  echo "<li>" + anchor('entry/show/all', 'All', 'title':'All Entries') + "</li>"
+  for $id, $row of $entry_type_all
+    echo "<li>" + anchor('entry/show/' + $row['label'], $row['name'], 'title':$row['name'] + ' Entries') + "</li>"
+    
+  echo "</ul>"
+  
+ %>			</li>
+			<li>
+				<%- anchor('report', 'Reports', 'title':'Reports') %>				<ul>
+					<li><%- anchor('report/balancesheet', 'Balance Sheet', 'title':'Balance Sheet') %></li>
+					<li><%- anchor('report/profitandloss', 'Profit & Loss', 'title':'Profit & Loss') %></li>
+					<li><%- anchor('report/trialbalance', 'Trial Balance', 'title':'Trial Balance') %></li>
+					<li><%- anchor('report/ledgerst', 'Ledger Statement', 'title':'Ledger Statement') %></li>
+					<li><%- anchor('report/reconciliation/pending', 'Reconciliation', 'title':'Reconciliation') %></li>
+				</ul>
+			</li>
+			<li>
+				<%- anchor('setting', 'Settings', 'title':'Settings') %>			</li>
+			<li>
+				<%- anchor('help', 'Help', 'title':'Help', 'class':'last') %>			</li>
+		</ul>
+	</div>
+	<div id="content">
+		<div id="sidebar">
+			<% if $page_sidebar?  then echo $page_sidebar %>		</div>
+		<div id="main">
+			<div id="main-title">
+				<% if $page_title?  then echo $page_title %>			</div>
+			<% if $nav_links?  then 
+  echo "<div id=\"main-links\">"
+  echo "<ul id=\"main-links-nav\">"
+  for $link, $title of $nav_links
+    if $title is "Print Preview" then echo "<li>" + anchor_popup($link, $title, 'title':$title, 'class':'nav-links-item', 'style':'background-image:url(\'' + asset_url( + 'images/buttons/navlink.png\');', 'width':'1024')) + "</li>"
+    else echo "<li>" + anchor($link, $title, 'title':$title, 'class':'nav-links-item', 'style':'background-image:url(\'' + asset_url( + 'images/buttons/navlink.png\');')) + "</li>"
+    
+  echo "</ul>"
+  echo "</div>"
+   %>			<div class="clear">
+			</div>
+			<div id="main-content">
+				<% $messages = @messages.get()
+if is_array($messages) then 
+  if count($messages['success']) > 0 then 
+    echo "<div id=\"success-box\">"
+    echo "<ul>"
+    for $message in $messages['success']
+      echo '<li>' + $message + '</li>'
+      
+    echo "</ul>"
+    echo "</div>"
+    
+  if count($messages['error']) > 0 then 
+    echo "<div id=\"error-box\">"
+    echo "<ul>"
+    for $message in $messages['error']
+      if substr($message, 0, 4) is "<li>" then echo $message
+      else echo '<li>' + $message + '</li>'
+      
+    echo "</ul>"
+    echo "</div>"
+    
+  if count($messages['message']) > 0 then 
+    echo "<div id=\"message-box\">"
+    echo "<ul>"
+    for $message in $messages['message']
+      echo '<li>' + $message + '</li>'
+      
+    echo "</ul>"
+    echo "</div>"
+    
+  
+ %>				<%- $contents %>			</div>
+		</div>
+	</div>
+</div>
+<div id="footer">
+	<% if $page_footer?  then echo $page_footer %>	<a href="http://webzash.org" target="_blank">Webzash<a/> is licensed under <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License, Version 2.0</a>
+</div>
+</body>
+</html>

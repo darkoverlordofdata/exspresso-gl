@@ -1,0 +1,57 @@
+<div>
+	<div id="left-col">
+		<div class="settings-container">
+			<div class="settings-title">
+				<%- anchor('setting/account', 'Account Settings', 'title':'Account Settings') %>			</div>
+			<div class="settings-desc">
+				Setup account details, currency, time, etc.
+			</div>
+		</div>
+		<div class="settings-container">
+			<div class="settings-title">
+				<%- anchor('setting/cf', 'C / F Account', 'title':'Carry Forward Account') %>			</div>
+			<div class="settings-desc">
+				Carry forward account to next year
+			</div>
+		</div>
+		<div class="settings-container">
+			<div class="settings-title">
+				<%- anchor('setting/email', 'Email Settings', 'title':'Email Settings') %>			</div>
+			<div class="settings-desc">
+				Setup outgoing email
+			</div>
+		</div>
+		<div class="settings-container">
+			<div class="settings-title">
+				<%- anchor('setting/printer', 'Printer Settings', 'title':'Printer Settings') %>			</div>
+			<div class="settings-desc">
+				Setup printing options for entries, reports, etc.
+			</div>
+		</div>
+		<div class="settings-container">
+			<div class="settings-title">
+				<%- anchor('setting/backup', 'Download Backup', 'title':'Download Backup') %>			</div>
+			<div class="settings-desc">
+				Download backup of current accounts data
+			</div>
+		</div>
+	</div>
+	<div id="right-col">
+		<div class="settings-container">
+			<div class="settings-title">
+				<%- anchor('tag', 'Tags', 'title':'Tags') %>			</div>
+			<div class="settings-desc">
+				Manage Entry Tags
+			</div>
+		</div>
+		<div class="settings-container">
+			<div class="settings-title">
+				<%- anchor('setting/entrytypes', 'Entry Types', 'title':'Entry Types') %>			</div>
+			<div class="settings-desc">
+				Manage Entry Types
+			</div>
+		</div>
+	</div>
+</div>
+<div class="clear">
+</div>

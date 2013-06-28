@@ -1,0 +1,24 @@
+<% echo "<p>"
+echo "You are currently logged in as: " + "<strong>" + @session.userdata('user_name') + "</strong>"
+echo " ("
+echo anchor('user/logout', 'Logout', 'title':'Logout', 'class':'anchor-link-a')
+echo ")"
+echo "</p>"
+
+echo "<p>"
+echo "Your current role is: " + "<strong>" + @session.userdata('user_role') + "</strong>"
+echo "</p>"
+
+echo "<p>"
+echo "Currently active account is: " + "<strong>"
+if @session.userdata('active_account') then echo @session.userdata('active_account')
+else echo "(None)"
+echo "</strong>"
+echo " ("
+echo anchor('user/account', 'Change', 'title':'Change Account', 'class':'anchor-link-a')
+echo ")"
+echo "</p>"
+
+echo "<p>"
+echo "Application version is: " + "<strong>" + @config.item('application_version') + "</strong>"
+echo "</p>"

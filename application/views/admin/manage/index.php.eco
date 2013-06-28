@@ -1,0 +1,52 @@
+<% echo "<p>"
+echo "<b>Currently active account : </b>"
+echo @session.userdata('active_account')
+echo "</p>"
+
+echo "<table border=0 cellpadding=5 class=\"simple-table manage-account-table\">"
+echo "<thead><tr><th>Label</th><th>Hostname</th><th>Port</th><th>Database</th><th>Username</th><th></th><th></th></tr></thead>"
+echo "<tbody>"
+$odd_even = "odd"
+for $label in $accounts
+  $ini_file = @config.item('config_path') + "accounts/" + $label + ".ini"
+  
+  #  Check if database ini file exists 
+  if get_file_info($ini_file) then 
+    #  Parsing database ini file 
+    $active_accounts = parse_ini_file($ini_file)
+    if $active_accounts then 
+      $db_host = if $active_accounts['db_hostname']?  then $active_accounts['db_hostname'] else "-"
+      $db_port = if $active_accounts['db_port']?  then $active_accounts['db_port'] else "-"
+      $db_name = if $active_accounts['db_name']?  then $active_accounts['db_name'] else "-"
+      $db_user = if $active_accounts['db_username']?  then $active_accounts['db_username'] else "-"
+      
+    
+  
+  echo "<tr class=\"tr-" + $odd_even
+  if @session.userdata('active_account') is $label then echo " tr-active"
+  echo "\">"
+  echo "<td>"
+  echo $label
+  echo "</td>"
+  echo "<td>" + $db_host + "</td>"
+  echo "<td>" + $db_port + "</td>"
+  echo "<td>" + $db_name + "</td>"
+  echo "<td>" + $db_user + "</td>"
+  
+  echo "<td>"
+  if @session.userdata('active_account') is $label then echo "Active"
+  echo "</td>"
+  
+  echo "<td>"
+  echo anchor("admin/manage/edit/" + $label, "Edit", 'title':'Edit ' + ucfirst($label + ' Account', 'class':'red-link'))
+  echo " &nbsp;" + anchor('admin/manage/delete/' + $label, img('src':asset_url( + "images/icons/delete.png", 'border':'0', 'alt':'Delete Account Settings', 'class':"confirmClick", 'title':"Delete Account Settings")), 'title':'Delete Account Settings') + " "
+  echo "</td>"
+  
+  echo "</tr>"
+  $odd_even = if ($odd_even is "odd") then "even" else "odd"
+  
+echo "</tbody>"
+echo "</table>"
+echo "<br />"
+echo anchor('admin', 'Back', 'title':'Back to admin')
+

@@ -1,0 +1,22 @@
+<% if is_array($error_messages) then 
+  if count($error_messages) > 0 then 
+    echo "<div id=\"error-box\">"
+    echo "<ul>"
+    for $message in $error_messages
+      echo '<li>' + $message + '</li>'
+      
+    echo "</ul>"
+    echo "</div>"
+    else 
+    echo "<div id=\"success-box\">"
+    echo "<ul>"
+    echo "<li>Everything is configured correctly.</li>"
+    echo "</ul>"
+    echo "</div>"
+    
+    
+  
+
+echo "<p>"
+echo anchor('admin', 'Back', 'Back to admin')
+echo "</p>"

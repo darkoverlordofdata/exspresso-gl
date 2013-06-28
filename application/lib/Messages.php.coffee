@@ -4,18 +4,15 @@
 #  Copyright DarkOverlordOfData (c) 2012
 #+--------------------------------------------------------------------+
 #
-#  This file is a part of Exspresso
+#  This file is a part of Exspresso-GL
 #
 #  Exspresso is free software you can copy, modify, and distribute
 #  it under the terms of the MIT License
 #
 #+--------------------------------------------------------------------+
 #
-# This file was ported from php to coffee-script using php2coffee
-#
-#
 
-<% if not defined('BASEPATH') then die ('No direct script access allowed')
+#
 
 #
 # Message:: a class for writing feedback message information to the session
@@ -32,14 +29,13 @@
 
 class Messages
 
-  _ci: {}
   _types: ['success', 'error', 'warning', 'message']
   
-  Messages : ($params = {}) ->
-    @_ci = get_instance()
-    @_ci.load.library('session')
+  constructor: (@controller, $params = {}) ->
+
+    @load.library('session')
     #  check if theres already messages, if not, initialise the messages array in the session
-    $messages = @_ci.session.userdata('messages')
+    $messages = @session.userdata('messages')
     if empty($messages) then 
       @clear()
       
@@ -51,12 +47,12 @@ class Messages
     for $type in @_types
       $messages[$type] = {}
       
-    @_ci.session.set_userdata('messages', $messages)
+    @session.set_userdata('messages', $messages)
     
   
   #  add a message, default type is message
   add : ($message, $type = 'message') ->
-    if strlen($message) < 1 then return $messages = @_ci.session.userdata('messages')if is_a($message, 'PEAR_Error') then 
+    if strlen($message) < 1 then return $messages = @session.userdata('messages')if is_a($message, 'PEAR_Error') then 
       $message = $message.getMessage()
       $type = 'error'
       else if not in_array($type, @_types) then 
@@ -64,8 +60,8 @@ class Messages
       $type = 'message'
       if not in_array($message, $messages[$type]) and is_string($message) then 
       $messages[$type].push $message
-      $messages = @_ci.session.set_userdata('messages', $messages)}sum : ($type = null) ->
-      $messages = @_ci.session.userdata('messages')
+      $messages = @session.set_userdata('messages', $messages)}sum : ($type = null) ->
+      $messages = @session.userdata('messages')
       if not empty($type) then 
         $i = count($messages[$type])
         return $i
@@ -76,7 +72,7 @@ class Messages
         
       return $i
       get : ($type = null) ->
-      $messages = @_ci.session.userdata('messages')
+      $messages = @session.userdata('messages')
       if not empty($type) then 
         if count($messages[$type]) is 0 then 
           return false
@@ -99,5 +95,5 @@ class Messages
         
       @clear()
       return $return
-      }#  handle PEAR errors gracefully#  don't repeat messages!#  return messages of given type or all types, return false if none#  return messages of given type or all types, return false if none, clearing stack
+      #  handle PEAR errors gracefully#  don't repeat messages!#  return messages of given type or all types, return false if none#  return messages of given type or all types, return false if none, clearing stack
 module.exports = Messages

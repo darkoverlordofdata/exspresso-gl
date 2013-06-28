@@ -4,18 +4,15 @@
 #  Copyright DarkOverlordOfData (c) 2012
 #+--------------------------------------------------------------------+
 #
-#  This file is a part of Exspresso
+#  This file is a part of Exspresso-GL
 #
 #  Exspresso is free software you can copy, modify, and distribute
 #  it under the terms of the MIT License
 #
 #+--------------------------------------------------------------------+
 #
-# This file was ported from php to coffee-script using php2coffee
-#
-#
 
-<% if not defined('BASEPATH') then die ('No direct script access allowed')
+#
 
 class Accountlist
 
@@ -37,15 +34,14 @@ class Accountlist
     
   
   init : ($id) ->
-    $CI = get_instance()
-    if $id is 0 then 
+      if $id is 0 then
       @id = 0
       @name = "None"
       @total = 0
       
       else 
-      $CI.db.from('groups').where('id', $id).limit(1)
-      $group_q = $CI.db.get()
+      @db.from('groups').where('id', $id).limit(1)
+      $group_q = @db.get()
       $group = $group_q.row()
       @id = $group.id
       @name = $group.name
@@ -56,9 +52,8 @@ class Accountlist
     
   
   add_sub_groups :  ->
-    $CI = get_instance()
-    $CI.db.from('groups').where('parent_id', @id)
-    $child_group_q = $CI.db.get()
+      @db.from('groups').where('parent_id', @id)
+    $child_group_q = @db.get()
     $counter = 0
     for $row in $child_group_q.result()
       @children_groups[$counter] = new Accountlist()
@@ -68,16 +63,15 @@ class Accountlist
       
     
   add_sub_ledgers :  ->
-    $CI = get_instance()
-    $CI.load.model('Ledger_model')
-    $CI.db.from('ledgers').where('group_id', @id)
-    $child_ledger_q = $CI.db.get()
+      @load.model('Ledger_model')
+    @db.from('ledgers').where('group_id', @id)
+    $child_ledger_q = @db.get()
     $counter = 0
     for $row in $child_ledger_q.result()
       @children_ledgers[$counter]['id'] = $row.id
       @children_ledgers[$counter]['name'] = $row.name
-      @children_ledgers[$counter]['total'] = $CI.Ledger_model.get_ledger_balance($row.id)
-      [@children_ledgers[$counter]['opbalance'], @children_ledgers[$counter]['optype']] = $CI.Ledger_model.get_op_balance($row.id)
+      @children_ledgers[$counter]['total'] = @Ledger_model.get_ledger_balance($row.id)
+      [@children_ledgers[$counter]['opbalance'], @children_ledgers[$counter]['optype']] = @Ledger_model.get_op_balance($row.id)
       @total = float_ops(@total, @children_ledgers[$counter]['total'], '+')
       $counter++
       

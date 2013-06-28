@@ -4,20 +4,17 @@
 #  Copyright DarkOverlordOfData (c) 2012
 #+--------------------------------------------------------------------+
 #
-#  This file is a part of Exspresso
+#  This file is a part of Exspresso-GL
 #
 #  Exspresso is free software you can copy, modify, and distribute
 #  it under the terms of the MIT License
 #
 #+--------------------------------------------------------------------+
 #
-# This file was ported from php to coffee-script using php2coffee
-#
+
 #
 
-<% if not defined('BASEPATH') then die ('No direct script access allowed')
-
-if not function_exists('form_dropdown_dc') then 
+if not function_exists('form_dropdown_dc') then
   exports.form_dropdown_dc = form_dropdown_dc = ($name, $selected = null, $extra = '') ->
     $options = "D":"Dr", "C":"Cr"
     
@@ -57,10 +54,9 @@ if not function_exists('form_input_date_restrict') then
 
 if not function_exists('form_input_ledger') then 
   exports.form_input_ledger = form_input_ledger = ($name, $selected = null, $extra = '', $type = 'all') ->
-    $CI = get_instance()
-    $CI.load.model('Ledger_model')
+      @load.model('Ledger_model')
     
-    if $type is 'bankcash' then $options = $CI.Ledger_model.get_all_ledgers_bankcash()else if $type is 'nobankcash' then $options = $CI.Ledger_model.get_all_ledgers_nobankcash()else if $type is 'reconciliation' then $options = $CI.Ledger_model.get_all_ledgers_reconciliation()else #  If no selected state was submitted we will attempt to set it automatically#  End of file MY_form_helper.php #  Location: ./system/application/helpers/MY_form_helper.php $options = $CI.Ledger_model.get_all_ledgers()if not ($selected) then 
+    if $type is 'bankcash' then $options = @Ledger_model.get_all_ledgers_bankcash()else if $type is 'nobankcash' then $options = @Ledger_model.get_all_ledgers_nobankcash()else if $type is 'reconciliation' then $options = @Ledger_model.get_all_ledgers_reconciliation()else #  If no selected state was submitted we will attempt to set it automatically#  End of file MY_form_helper.php #  Location: ./system/application/helpers/MY_form_helper.php $options = @Ledger_model.get_all_ledgers()if not ($selected) then
       #  If the form name appears in the $_POST array we have a winner!
       if $_POST[$name]?  then 
         $selected = $_POST[$name]

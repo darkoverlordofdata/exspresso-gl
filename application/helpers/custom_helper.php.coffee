@@ -4,18 +4,15 @@
 #  Copyright DarkOverlordOfData (c) 2012
 #+--------------------------------------------------------------------+
 #
-#  This file is a part of Exspresso
+#  This file is a part of Exspresso-GL
 #
 #  Exspresso is free software you can copy, modify, and distribute
 #  it under the terms of the MIT License
 #
 #+--------------------------------------------------------------------+
 #
-# This file was ported from php to coffee-script using php2coffee
-#
-#
 
-<% if not defined('BASEPATH') then die ('No direct script access allowed')
+#
 
 #
 # Converts D/C to Dr / Cr
@@ -84,8 +81,7 @@ if not function_exists('convert_dc') then
                 # @return	string
                 #return $default}}if not function_exists('entry_type_info') then 
                   exports.entry_type_info = entry_type_info = ($entry_type_id) ->
-                    $CI = get_instance()
-                    $entry_type_all = $CI.config.item('account_entry_types')
+                                      $entry_type_all = @config.item('account_entry_types')
                     
                     if $entry_type_all[$entry_type_id] then 
                       return 
@@ -113,8 +109,7 @@ if not function_exists('convert_dc') then
                     
                   if not function_exists('entry_type_name_to_id') then 
                   exports.entry_type_name_to_id = entry_type_name_to_id = ($entry_type_name) ->
-                    $CI = get_instance()
-                    $entry_type_all = $CI.config.item('account_entry_types')
+                                      $entry_type_all = @config.item('account_entry_types')
                     for $id, $row of $entry_type_all
                       if $row['label'] is $entry_type_name then 
                         return $id
@@ -125,8 +120,7 @@ if not function_exists('convert_dc') then
                     
                   if not function_exists('full_entry_number') then 
                   exports.full_entry_number = full_entry_number = ($entry_type_id, $entry_number) ->
-                    $CI = get_instance()
-                    $entry_type_all = $CI.config.item('account_entry_types')
+                                      $entry_type_all = @config.item('account_entry_types')
                     $return_html = ""
                     if not $entry_type_all[$entry_type_id] then 
                       $return_html = $entry_number

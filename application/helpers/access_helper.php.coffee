@@ -4,18 +4,15 @@
 #  Copyright DarkOverlordOfData (c) 2012
 #+--------------------------------------------------------------------+
 #
-#  This file is a part of Exspresso
+#  This file is a part of Exspresso-GL
 #
 #  Exspresso is free software you can copy, modify, and distribute
 #  it under the terms of the MIT License
 #
 #+--------------------------------------------------------------------+
 #
-# This file was ported from php to coffee-script using php2coffee
-#
-#
 
-<% if not defined('BASEPATH') then die ('No direct script access allowed')
+#
 
 #
 # Check if the currently logger in user has the necessary permissions
@@ -50,8 +47,7 @@
 
 if not function_exists('check_access') then 
   exports.check_access = check_access = ($action_name) ->
-    $CI = get_instance()
-    $user_role = $CI.session.userdata('user_role')
+      $user_role = @session.userdata('user_role')
     $permissions['manager'] = [
       'view entry', 
       'create entry', 

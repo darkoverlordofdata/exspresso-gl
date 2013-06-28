@@ -4,15 +4,14 @@
 #  Copyright DarkOverlordOfData (c) 2012
 #+--------------------------------------------------------------------+
 #
-#  This file is a part of Exspresso
+#  This file is a part of Exspresso-GL
 #
 #  Exspresso is free software you can copy, modify, and distribute
 #  it under the terms of the MIT License
 #
 #+--------------------------------------------------------------------+
 #
-# This file was ported from php to coffee-script using php2coffee
-#
+
 #
 
 <% 
@@ -227,10 +226,10 @@ class Manage extends Controller
         #  Parsing database ini file 
         $active_accounts = parse_ini_file($ini_file)
         if not $active_accounts then 
-          $CI.messages.add('Invalid account settings file', 'error')
+          @messages.add('Invalid account settings file', 'error')
           else 
           #  Check if all needed variables are set in ini file 
-          if $active_accounts['db_hostname']?  then $data['database_host']['value'] = $active_accounts['db_hostname']else $CI.messages.add('Hostname missing from account settings file', 'error')if $active_accounts['db_port']?  then $data['database_port']['value'] = $active_accounts['db_port']else $CI.messages.add('Port missing from account settings file. Default MySQL port is 3306', 'error')if $active_accounts['db_name']?  then $data['database_name']['value'] = $active_accounts['db_name']else $CI.messages.add('Database name missing from account settings file', 'error')if $active_accounts['db_username']?  then $data['database_username']['value'] = $active_accounts['db_username']else $CI.messages.add('Database username missing from account settings file', 'error')if not $active_accounts['db_password']?  then $CI.messages.add('Database password missing from account settings file', 'error')}}}@validation.set_rules('database_name', 'Database Name', 'trim|required')#  Form validations if @validation.run() is false then
+          if $active_accounts['db_hostname']?  then $data['database_host']['value'] = $active_accounts['db_hostname']else @messages.add('Hostname missing from account settings file', 'error')if $active_accounts['db_port']?  then $data['database_port']['value'] = $active_accounts['db_port']else @messages.add('Port missing from account settings file. Default MySQL port is 3306', 'error')if $active_accounts['db_name']?  then $data['database_name']['value'] = $active_accounts['db_name']else @messages.add('Database name missing from account settings file', 'error')if $active_accounts['db_username']?  then $data['database_username']['value'] = $active_accounts['db_username']else @messages.add('Database username missing from account settings file', 'error')if not $active_accounts['db_password']?  then @messages.add('Database password missing from account settings file', 'error')}}}@validation.set_rules('database_name', 'Database Name', 'trim|required')#  Form validations if @validation.run() is false then
             @messages.add(validation_errors(), 'error')
             @template.load('admin_template', 'admin/manage/edit', $data)
             return 
